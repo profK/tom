@@ -1,5 +1,5 @@
 # tom
-TOM or The Online Machine is a python RAD fraemwork for rich client/server applications.  It is pure python (exceot for QT) and plugin based on both client and server.
+TOM or The Online Machine is a python RAD framework for rich client/server applications.  It is pure python (exceot for QT) and plugin based on both client and server.
 
 TOM leverages some other projects with my thanks:  
 
