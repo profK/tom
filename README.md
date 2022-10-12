@@ -1,5 +1,5 @@
 # tom
-TOM or The Online Machine is a python RAD framework for rich client/server applications.  It is pure python (exceot for QT) and plugin based on both client and server.
+TOM or The Online Machine is a python RAD framework for rich client/server applications.  It is pure python (except for QT) and plugin based on both client and server.
 
 # Rationale
 Many web client/server stacks for python already exist (e.g. Django).  However, this frameworks are generally very complex due to their need to tame the web environment.  Creating client applications often means going outside of python code to HTML/CSS/Javascript.  This increases the compelxity of writing any rich full stack app.  Finally, deploying the apps built on these frameworks generally means configuring a complicated back end web server environment.
