@@ -8,7 +8,7 @@ Tom is designed to make it easy and fast for python coders to build applications
 
 I wrote this app because of my frustration at the "web tax" imposed on my time by existingtechnologies.  I hope it is useful to others.
 
-#Acknowledgments
+# Acknowledgments
 
 TOM leverages some other projects with my thanks:  
 
