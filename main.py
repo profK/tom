@@ -8,12 +8,15 @@ from PyQt6.QtWidgets import QApplication
 import TomPluginManager
 
 
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     print("start")
     app = QApplication(sys.argv)
     pluginManager=TomPluginManager.PluginManager()
     pluginManager.load_plugins()
+    ctxt = pluginManager.appContext
+    ctxt.conn.root.TestProxy.ping()
     app.exec()
 
 

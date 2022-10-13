@@ -64,8 +64,9 @@ servicesManager.load_plugins(servicesDir)
 for serviceInit in servicesManager.get_all_plugins() :
     if hasattr(serviceInit,"SERVICES") :
         for kv in serviceInit.SERVICES :
+            instance = kv[1]()
             print("TomServo found service: "+kv[0])
-            setattr(MainService, "exposed_" + kv[0], kv[1])
+            setattr(MainService, "exposed_" + kv[0], instance)
 #open database
 userDB = pluginManager.appContext.Data.OpenTable("Users")
 xtion = userDB.begin_transaction()
