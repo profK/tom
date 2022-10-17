@@ -16,7 +16,7 @@ if __name__ == '__main__':
     pluginManager=TomPluginManager.PluginManager()
     pluginManager.load_plugins()
     ctxt = pluginManager.appContext
-    ctxt.conn.root.TestProxy.ping()
+    ctxt.Connection.conn.root.TestProxy.ping()
     app.exec()
 
 
