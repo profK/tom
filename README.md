@@ -18,4 +18,5 @@ TOM leverages some other projects with my thanks:
 
 [PyQt6](https://pypi.org/project/PyQt6/) is used for the client interface.
 
-More documentation to follow
+Full documentation at: 
+https://purdue0-my.sharepoint.com/:w:/g/personal/jpkessel_purdue_edu/EajGOaQvHGZDtM9LvzWktqYBzMrMha6xWi2HejMrkC0Sog
