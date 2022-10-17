@@ -3,6 +3,11 @@ import rpyc
 
 from TomPluginManager import AppContext
 
+DEPENDENCIES = {
+    "Window"
+}
+
+
 global conn
 
 def OnButtonClick() :
