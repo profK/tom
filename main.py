@@ -5,16 +5,28 @@
 
 import sys
 from PyQt6.QtWidgets import QApplication
+import os
 import TomPluginManager
+import importlib
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     print("start")
-    app = QApplication(sys.argv)
-    pluginManager=TomPluginManager.PluginManager()
+    systemModules: list = os.listdir("System")
+    if len(systemModules)==0 :
+        print("Couldn't find a system module!")
+        exit(1)
+    #otherwise use first one found as system module
+    systemModule = importlib.import_module(
+        os.path.join("System",systemModules[0]).replace("\\","."))
+    appContext = TomPluginManager.AppContext()
+    appContext.System=systemModule
+    appContext.System.system_init(appContext)
+    pluginManager=TomPluginManager.PluginManager(appContext)
     pluginManager.load_plugins()
-    app.exec()
+    appContext.System.system_start(appContext)
+
 
 
 
