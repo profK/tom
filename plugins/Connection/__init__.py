@@ -23,7 +23,7 @@ def init_plugin(ctxt:AppContext) :
         conn = rpyc.connect("localhost",18812)
         if conn.root.login("test","password") :
             print("connected to tomservo")
-            ctxt.conn = conn
+            ctxt.Connection.conn = conn
         else :
             print("Invalid user or password")
     except BaseException as ex :

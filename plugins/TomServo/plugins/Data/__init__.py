@@ -23,7 +23,7 @@ class Trans :
             return None;
         return orjson.loads(b)
     def has(self,key:str) :
-        return self.get(key) == None
+        return self.get(key) != None
 
     def end(self) :
         self.transaction.commit()

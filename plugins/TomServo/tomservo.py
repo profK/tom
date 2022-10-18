@@ -30,6 +30,7 @@ class MainService(rpyc.Service):
         pass
 
     def exposed_login(self,name:str,passwdHash:str) -> bool:
+        global userDB
         xtion = userDB.begin_transaction()
         hash=xtion.get(name+".pwhash")
         xtion.end()
