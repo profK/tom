@@ -4,6 +4,10 @@ from TomPluginManager import AppContext
 from . import tomservo
 import threading
 
+DEPENDENCIES = {
+    "Window"
+}
+
 def OnButtonClick() :
     print("Tomservo Button Clicked")
 

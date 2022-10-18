@@ -2,7 +2,9 @@ from PyQt6.QtGui import QAction
 
 from TomPluginManager import AppContext
 
-
+DEPENDENCIES = {
+    "Window"
+}
 def OnButtonClick() :
     print("Dummy Button Clicked")
 

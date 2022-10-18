@@ -3,6 +3,11 @@ import rpyc
 
 from TomPluginManager import AppContext
 
+DEPENDENCIES = {
+    "Window"
+}
+
+
 global conn
 
 def OnButtonClick() :
@@ -18,7 +23,7 @@ def init_plugin(ctxt:AppContext) :
         conn = rpyc.connect("localhost",18812)
         if conn.root.login("test","password") :
             print("connected to tomservo")
-            conn.root.TestProxy.ping()
+            ctxt.conn = conn
         else :
             print("Invalid user or password")
     except BaseException as ex :
