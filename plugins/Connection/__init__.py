@@ -14,6 +14,8 @@ DEPENDENCIES = {
 
 global conn
 global dialog
+global ctxt
+
 def OnButtonClick() :
     global dialog
     dialog.setVisible(True)
@@ -21,20 +23,32 @@ def OnButtonClick() :
 ToolBarAction = QAction("Connections")
 ToolBarAction.triggered.connect(OnButtonClick)
 
+def close_dialog() :
+    dialog.setVisible(False)
 
-def init_plugin(ctxt:AppContext) :
-    global conn, dialog
+def connect_server() :
+    global ctxt
+    host = dialog.hostname.text()
+    port = dialog.portnum.text()
+    try:
+        conn = rpyc.connect(host, int(port))
+        if conn.root.login("test", "password"):
+            print("connected to tomservo")
+            ctxt.Connection.conn = conn
+        else:
+            print("Invalid user or password")
+    except BaseException as ex:
+        print("Connection failed: " + str(ex))
+    pass
+
+def init_plugin(context:AppContext) :
+    global conn, dialog, ctxt
+    ctxt = context
     ctxt.Window.AddToToolbar(ToolBarAction)
     dir = os.path.dirname(__file__)
     dialog = uic.loadUi(os.path.join(dir,"ConnectDialog.ui"))
+    dialog.closebutton.clicked.connect(close_dialog)
+    dialog.connectbutton.clicked.connect(connect_server)
     ctxt.Window.AddToWindow(dialog)
 
-    try:
-        conn = rpyc.connect("localhost",18812)
-        if conn.root.login("test","password") :
-            print("connected to tomservo")
-            ctxt.Connection.conn = conn
-        else :
-            print("Invalid user or password")
-    except BaseException as ex :
-        print("Connection failed: "+str(ex))
+
