@@ -1,4 +1,4 @@
-# tom
+# tom-vtt
 TOM or The Online Machine is a python RAD framework for rich client/server applications.  It is pure python (except for QT) and plugin based on both client and server.
 
 # Rationale
@@ -20,3 +20,5 @@ TOM leverages some other projects with my thanks:
 
 Full documentation at: 
 https://purdue0-my.sharepoint.com/:w:/g/personal/jpkessel_purdue_edu/EajGOaQvHGZDtM9LvzWktqYBzMrMha6xWi2HejMrkC0Sog
+
+A sample application can be found in the branch tom-vtt
