@@ -33,12 +33,16 @@ def connect_server() :
     try:
         conn = rpyc.connect(host, int(port))
         if conn.root.login("test", "password"):
-            print("connected to tomservo")
+            ctxt.Window.ShowMessage("Connection Result",
+                                    "You are connected to "+host+":"+port)
             ctxt.Connection.conn = conn
+            close_dialog()
         else:
-            print("Invalid user or password")
+            ctxt.Window.ShowMessage("Connection Result",
+                                    "Invalid user or password")
     except BaseException as ex:
-        print("Connection failed: " + str(ex))
+        ctxt.Window.ShowMessage("Connection Result",
+                                "Connection to " + host + ":" + port +" failed")
     pass
 
 def init_plugin(context:AppContext) :

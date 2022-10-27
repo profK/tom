@@ -12,7 +12,10 @@ def AddToToolbar(action: QAction):
     __window.add_to_toolbar(action)
 
 def AddToWindow(widget: QWidget):
-    __window.add_to_toolbar(widget)
+    __window.add_to_window(widget)
+
+def ShowMessage(title: str, msg: str):
+    __window.show_message(title,msg)
 
 def init_plugin(ctx:AppContext):
     __window.show()
