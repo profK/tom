@@ -30,9 +30,11 @@ def connect_server() :
     global ctxt
     host = dialog.hostname.text()
     port = dialog.portnum.text()
+    user = dialog.username.text()
+    password = dialog.password.text()
     try:
         conn = rpyc.connect(host, int(port))
-        if conn.root.login("test", "password"):
+        if conn.root.login(user, password):
             ctxt.Window.ShowMessage("Connection Result",
                                     "You are connected to "+host+":"+port)
             ctxt.Connection.conn = conn
@@ -40,6 +42,7 @@ def connect_server() :
         else:
             ctxt.Window.ShowMessage("Connection Result",
                                     "Invalid user or password")
+            close_dialog()
     except BaseException as ex:
         ctxt.Window.ShowMessage("Connection Result",
                                 "Connection to " + host + ":" + port +" failed")
