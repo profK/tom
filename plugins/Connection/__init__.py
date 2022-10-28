@@ -32,10 +32,11 @@ def connect_server() :
     host = dialog.hostname.text()
     port = dialog.portnum.text()
     user = dialog.username.text()
-    password = hashlib.sha384(dialog.password.text().encode())
+    password = dialog.password.text()
+    hash = hashlib.sha384(password.encode()).hexdigest()
     try:
         conn = rpyc.connect(host, int(port))
-        if conn.root.login(user, password):
+        if conn.root.login(user, hash):
             ctxt.Window.ShowMessage("Connection Result",
                                     "You are connected to "+host+":"+port)
             ctxt.Connection.conn = conn
