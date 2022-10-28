@@ -46,6 +46,7 @@ def connect_server() :
     except BaseException as ex:
         ctxt.Window.ShowMessage("Connection Result",
                                 "Connection to " + host + ":" + port +" failed")
+        close_dialog()
     pass
 
 def init_plugin(context:AppContext) :

@@ -41,7 +41,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>localthost</string>
+    <string>localhost</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
@@ -137,7 +137,7 @@
     <string>password</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="connectbutton">
    <property name="geometry">
     <rect>
      <x>250</x>
@@ -155,7 +155,7 @@
     <string>Connect</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="closebutton">
    <property name="geometry">
     <rect>
      <x>30</x>
