@@ -1,6 +1,6 @@
 import os
 import time
-
+import hashlib
 import rpyc
 from rpyc.utils.helpers import classpartial
 from rpyc.core import netref
@@ -15,8 +15,21 @@ class TestProxy():
     def exposed_ping(self):
         print("ping from "+__file__)
 
+def set_user(db, name: str, password: str ) :
+    xtion = db.begin_transaction()
+    hash =  hashlib.sha384(password.encode()).hexdigest()
+    xtion.put(name+"pwhash",hash)
+    xtion.end()
 
-
+def check_user(db,name: str,hash: str) -> bool :
+    try :
+        xtion = db.begin_transaction()
+        dbhash= xtion.get(name + "pwhash")
+        xtion.end()
+        return dbhash==hash
+    except BaseException as ex:
+        print("DB exception: "+ex)
+        return False
 
 class MainService(rpyc.Service):
     def on_connect(self, conn):
@@ -31,10 +44,7 @@ class MainService(rpyc.Service):
 
     def exposed_login(self,name:str,passwdHash:str) -> bool:
         global userDB
-        xtion = userDB.begin_transaction()
-        hash=xtion.get(name+".pwhash")
-        xtion.end()
-        return passwdHash==hash
+        return check_user(userDB,name,passwdHash)
 
     #exposed_TestProxy = TestProxy()
 
@@ -70,11 +80,7 @@ for serviceInit in servicesManager.get_all_plugins() :
             setattr(MainService, "exposed_" + kv[0], instance)
 #open database
 userDB = pluginManager.appContext.Data.OpenTable("Users")
-xtion = userDB.begin_transaction()
-#mamke sure test login in there
-if (not xtion.has("test.pwhash")) :
-    xtion.put("test.pwhash","password")
-xtion.end()
+set_user(userDB, "test","password")
 
 if __name__ == "__main__":
     start()

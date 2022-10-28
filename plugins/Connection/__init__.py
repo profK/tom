@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QDialog
 import rpyc
 import os.path
 from PyQt6 import uic
+import hashlib
 
 
 from TomPluginManager import AppContext
@@ -31,7 +32,7 @@ def connect_server() :
     host = dialog.hostname.text()
     port = dialog.portnum.text()
     user = dialog.username.text()
-    password = dialog.password.text()
+    password = hashlib.sha384(dialog.password.text().encode())
     try:
         conn = rpyc.connect(host, int(port))
         if conn.root.login(user, password):
