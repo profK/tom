@@ -2,12 +2,13 @@ from TomPluginManager import AppContext
 
 
 class ImageStoreService():
-    def __init__(self, appContext):
+    def __init__(self):
         global ctxt
-        ctxt = appContext
+
+
         print("Loaded ImageStoreService")
 
-    def init_serice(self,appContext: AppContext):
+    def init_service(self,appContext: AppContext):
         global ctxt, imageDB
         ctxt = appContext
         imageDB = ctxt.Data.OpenTable("Images")

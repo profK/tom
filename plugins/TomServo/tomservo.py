@@ -87,7 +87,7 @@ for serviceInit in servicesManager.get_all_plugins() :
     if hasattr(serviceInit,"SERVICES") :
         for kv in serviceInit.SERVICES :
             instance = kv[1]()
-            instance.init_service(servicesManager.appContext)
+            instance.init_service(appContext)
             print("TomServo found service: "+kv[0])
             setattr(MainService, "exposed_" + kv[0], instance)
 #open database

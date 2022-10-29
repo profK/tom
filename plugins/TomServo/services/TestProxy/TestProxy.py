@@ -1,7 +1,8 @@
 class TestProxy():
-    def __init__(self,appContext):
+    def __init__(self):
         global ctxt
-        ctxt=appContext
-        print(__class__)
+
+    def init_service(self,appContext):
+        pass
     def exposed_ping(self):
         print("ping recieved at "+__file__)
