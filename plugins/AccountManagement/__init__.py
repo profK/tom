@@ -16,12 +16,18 @@ ToolBarAction = QAction("Account")
 ToolBarAction.triggered.connect(OnButtonClick)
 
 
-def init_plugin(ctxt: AppContext) :
-    global dialog
+def select_icon() :
+    ctxt.ImageStoreClient.ShowImageChooser("icons.")
+
+def init_plugin(context: AppContext) :
+    global dialog, ctxt
+    ctxt = context
     dir = os.path.dirname(__file__)
     dialog = uic.loadUi(os.path.join(dir, "AccountDialog.ui"))
     defaultAvatar = QIcon(os.path.join(dir, "ClickToAddAvatar.png"))
     dialog.icon.setIcon(defaultAvatar)
+    #wire thw controls
+    dialog.icon.clicked.connect(select_icon)
 
     ctxt.Window.AddToToolbar(ToolBarAction)
     #TODO  Wire up dialog

@@ -10,25 +10,16 @@ class AccountManagerService():
         ctxt = appContext
         accountDB = ctxt.Data.OpenTable("Accounts");
 
-    def exposed_setHandle(self,handle:str):
+    def exposed_setAccountInfo(self,userInfo):
         global accountDB
         xaction = accountDB.start_transaction()
-        xaction.put(ctxt.username+".handle",handle)
+        xaction.put(ctxt.username+".info",userInfo)
         xaction.end()
 
-    def expose_setImage(self, imagePath: str) :
-        global accountDB
-        xaction = accountDB.start_transaction()
-        xaction.put(ctxt.username + ".image", imagePath)
-        xaction.end()
 
     def exposed_getAccountInfo(self) :
         global accountDB
         xaction = accountDB.start_transaction()
-        imagePath = xaction.get(ctxt.username + ".image")
-        handle =  xaction.put(ctxt.username+".handle")
+        info = xaction.get(ctxt.username + ".info")
         xaction.end()
-        return {
-            "handle":handle,
-            "imagePath": imagePath
-        }
+        return info
