@@ -23,11 +23,11 @@ def init_plugin(appContext: AppContext) :
 def StoreImage(key: str, image: QPixmap) :
     global ctxt
     data = base64.b64encode(image)
-    ctxt.services.ImageStoreService.store_image_bytes(key, data)
+    ctxt.Connection.conn.root.ImageStoreService.store_image_bytes(key, data)
 
 def GetImage(key:str) -> QPixmap :
     global ctxt
-    imgData = ctxt.conn.root.ImageStoreService.get_image_bytes(key)
+    imgData = ctxt.Connection.conn.root.ImageStoreService.get_image_bytes(key)
     if imgData == None :
         return None
     else :
