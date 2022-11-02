@@ -68,7 +68,7 @@ def PixmapToByteArray(pixmap: QPixmap) -> bytes:
 def save_new_image():
     pixmap = GetBiggestPixmapFromQIcon(uploadImageDialog.image.icon())
     StoreImage(
-        uploadImageDialog.prefix.text()+"."+uploadImageDialog.name.text(),
+        uploadImageDialog.prefix.text()+uploadImageDialog.name.text(),
         base64.b64encode(PixmapToByteArray(pixmap))                                 )
     uploadImageDialog.setVisible(False)
 

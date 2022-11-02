@@ -1,3 +1,5 @@
+import base64
+
 from TomPluginManager import AppContext
 
 
@@ -17,11 +19,12 @@ class ImageStoreService():
         global imageDB
         try :
            xition = imageDB.begin_transaction()
-           xition.put(key,imgdata)
+           xition.put(key,imgdata.decode())
            xition.end()
            return True
-        except BaseException :
+        except BaseException as ex:
             print("Error storing image with key "+key)
+            print(ex)
             return False
 
     def exposed_get_image_bytes(self,key: str) -> bytes :
@@ -29,7 +32,7 @@ class ImageStoreService():
            xition = imageDB.begin_transaction()
            imgdata = xition.get(key)
            xition.end()
-           return imgdata
+           return imgdata.encode()
         except BaseException :
             print("Error getting image with key "+key)
             return None
