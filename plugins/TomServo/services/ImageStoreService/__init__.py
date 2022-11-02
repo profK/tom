@@ -1,5 +1,5 @@
 from . import ImageStoreService
 SERVICES = {
-    ("TestProxy",ImageStoreService.ImageStoreService)
+    ("ImageStoreService",ImageStoreService.ImageStoreService)
 }
 

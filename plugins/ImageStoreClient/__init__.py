@@ -4,6 +4,7 @@ import os
 from PyQt6 import uic
 from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6.QtWidgets import QFileDialog
+from PyQt6.QtCore import QBuffer, QSize, QByteArray
 
 from TomPluginManager import AppContext
 
@@ -22,7 +23,7 @@ def init_plugin(appContext: AppContext) :
 def StoreImage(key: str, image: QPixmap) :
     global ctxt
     data = base64.b64encode(image)
-    ctxt.conn.root.ImageStoreService.store_image_bytes(key, data)
+    ctxt.services.ImageStoreService.store_image_bytes(key, data)
 
 def GetImage(key:str) -> QPixmap :
     global ctxt
@@ -50,7 +51,25 @@ def close_image_selector() :
 def close_save_dialog() :
     uploadImageDialog.setVisible(False)
 
+def GetBiggestPixmapFromQIcon(icon: QIcon) -> QPixmap :
+    sizes = icon.availableSizes()
+    maximum: int = sizes[0].width();
+    for size in sizes :
+        maximum = max(maximum, size.width());
+
+    return icon.pixmap(QSize(maximum, maximum));
+
+def PixmapToByteArray(pixmap: QPixmap) -> bytes:
+    image = pixmap.toImage()
+    sz = image.sizeInBytes()
+    bits = image.bits().asarray(sz)
+    return bits
+
 def save_new_image():
+    pixmap = GetBiggestPixmapFromQIcon(uploadImageDialog.image.icon())
+    StoreImage(
+        uploadImageDialog.prefix.text()+"."+uploadImageDialog.name.text(),
+        base64.b64encode(PixmapToByteArray(pixmap))                                 )
     uploadImageDialog.setVisible(False)
 
 def choose_local_image() :
