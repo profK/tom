@@ -36,3 +36,7 @@ class ImageStoreService():
         except BaseException :
             print("Error getting image with key "+key)
             return None
+
+    def exposed_get_image_names(self,prefix: str) :
+        xition = imageDB.begin_transaction()
+        cursor = xition.get_cursor()
