@@ -12,7 +12,6 @@ env = lmdb.Environment("kv_store.lmdb",max_dbs=100)
 class Cursor :
     def __init__(self,cursor: lmdb.Cursor,prefix: str = None) :
         self.cursor = cursor
-        self.cursor.next() # position at first element
         if not prefix==None :
             while (not str(self.cursor.key()).startswith(prefix)) and (self.cursor.next()):
                 pass # all work done in test
