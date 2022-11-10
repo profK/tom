@@ -1,7 +1,7 @@
 import base64
-
+from fastapi import FastAPI
 from TomPluginManager import AppContext
-
+from
 
 class ImageStoreService():
     def __init__(self):
@@ -40,3 +40,10 @@ class ImageStoreService():
     def exposed_get_image_names(self,prefix: str) :
         xition = imageDB.begin_transaction()
         cursor = xition.get_cursor()
+
+app = FastAPI()
+@app.get("/images/{image_path}")
+async def get_image(image_path: str):
+    # Returns a cv2 image array from the document vector
+
+    return StreamingResponse(io.BytesIO(im_png.tobytes()), media_type="image/png")
