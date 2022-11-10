@@ -33,10 +33,18 @@ def GetImage(key:str) -> QPixmap :
     else :
         return base64.b64decode(imgData)
 
+def PopulateImageSelector(prefix:str) :
+    global ctxt
+    names = ctxt.Connection.conn.root.ImageStoreService.get_image_names(prefix)
+
+    for name in names :
+        print(name)
+        pass
 def ShowImageChooser(prefix: str) -> str :
      global imageSelector
      uploadImageDialog.prefix.setText(prefix)
      imageSelector.prefix.setText(prefix)
+     PopulateImageSelector(prefix)
      imageSelector.exec()
 
 def upload_image() :

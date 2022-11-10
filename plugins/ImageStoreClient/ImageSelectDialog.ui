@@ -84,7 +84,7 @@
        <height>321</height>
       </rect>
      </property>
-     <layout class="QGridLayout" name="gridLayout"/>
+     <layout class="QGridLayout" name="imageGrid"/>
     </widget>
    </widget>
   </widget>

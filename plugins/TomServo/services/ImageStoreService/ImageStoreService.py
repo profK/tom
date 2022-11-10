@@ -1,7 +1,8 @@
 import base64
-from fastapi import FastAPI
+
 from TomPluginManager import AppContext
-from
+from plugins.Data import Cursor
+
 
 class ImageStoreService():
     def __init__(self):
@@ -37,9 +38,22 @@ class ImageStoreService():
             print("Error getting image with key "+key)
             return None
 
-    def exposed_get_image_names(self,prefix: str) :
+    def exposed_get_image_names(self,prefix: str) -> tuple :
         xition = imageDB.begin_transaction()
-        cursor = xition.get_cursor()
+        cursor: Cursor = xition.cursor()
+        names: list = list()
+        foundStart: bool = False
+        for kv in cursor :
+            if kv == None :
+                break
+            else :
+                if kv[0].startswith(prefix) :
+                    names.append(kv[1])
+                else :
+                    if len(names)>0 :
+                        break
+        return tuple(names)
+
 
 app = FastAPI()
 @app.get("/images/{image_path}")
