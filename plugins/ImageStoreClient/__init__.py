@@ -19,6 +19,7 @@ DEPENDENCIES = {
 def init_plugin(appContext: AppContext) :
     global ctxt
     ctxt = appContext
+    ctxt.Connection.conn.root.ImageStoreService.clearAll() # for debugging
 
 def StoreImage(key: str, image: QPixmap) :
     global ctxt
@@ -35,7 +36,7 @@ def GetImage(key:str) -> QPixmap :
 
 def PopulateImageSelector(prefix:str) :
     global ctxt
-    names = ctxt.Connection.conn.root.ImageStoreService.get_image_names(prefix)
+    names = ctxt.Connection.conn.root.ImageStoreService.get_image_list(prefix)
 
     for name in names :
         print(name)
@@ -102,4 +103,6 @@ uploadImageDialog.image.setIcon(QIcon(os.path.join(dir, "select_image.png")))
 uploadImageDialog.cancel.clicked.connect(close_save_dialog)
 uploadImageDialog.save.clicked.connect(save_new_image)
 uploadImageDialog.image.clicked.connect(choose_local_image)
+
+
 

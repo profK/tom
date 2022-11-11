@@ -1,12 +1,17 @@
+import inspect
+import os
 from typing import Any
 
 from TomPluginManager import AppContext
 import lmdb
 import orjson
+
+rootPath = os.path.dirname(inspect.getfile(inspect))
+
 def init_plugin(ctxt:AppContext) :
     print("initted data")
 
-env = lmdb.Environment("kv_store.lmdb",max_dbs=100)
+env = lmdb.Environment(os.path.join(rootPath,"kv_store.lmdb"),max_dbs=100)
 
 
 class Cursor :
@@ -36,6 +41,8 @@ class Cursor :
         except StopIteration :
             return None
 
+
+
 class Trans :
     def __init__(self,transaction:lmdb.Transaction):
         self.transaction = transaction
@@ -62,6 +69,10 @@ class KVTable:
         global env
         return Trans(env.begin(db=self.db, write=write, buffers=True))
 
+    def clearAll(self):
+        with self.db.begin(write=True) as in_txn:
+            in_txn.drop(self.db)
 
 def OpenTable(name:str) -> KVTable :
     return KVTable(name)
+

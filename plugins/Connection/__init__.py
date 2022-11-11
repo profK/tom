@@ -6,7 +6,6 @@ from PyQt6 import uic
 import hashlib
 #fastAPI
 from typing import Union
-from fastapi import FastAPI
 import imageio as iio
 
 

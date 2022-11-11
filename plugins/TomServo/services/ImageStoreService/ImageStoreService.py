@@ -1,8 +1,28 @@
 import base64
+import os.path
 
 from TomPluginManager import AppContext
 from plugins.Data import Cursor
+from datetime import datetime
 
+def save_image_to_file(key:str, imgdata:bytes) :
+    path = key[0:key.rfind("."):]
+    path = path.replace(",","/")
+    if not os.path.exists(path) :
+        os.makedirs(path)
+    filename = key[key.rfind(".")+1::]
+    with open(path+"/"+filename, "wb") as binary_file:
+        # Write bytes to file
+        binary_file.write(imgdata)
+
+def read_image_from_file(key:str) ->bytes :
+    fullnameNoExt = key[0:key.rfind("."):]
+    path = fullnameNoExt[0:key.rfind("."):]
+    path = path.replace(",","/")
+    filename = key[key.rfind(".")::]
+    with open(path+"/"+filename, "rb") as binary_file:
+        # read bytes from file
+        return binary_file.read()
 
 class ImageStoreService():
     def __init__(self):
@@ -20,7 +40,8 @@ class ImageStoreService():
         global imageDB
         try :
            xition = imageDB.begin_transaction()
-           xition.put(key,imgdata.decode())
+           xition.put(key,{"key":key,  "timestamp":datetime.utcnow()})
+           save_image_to_file(key,imgdata)
            xition.end()
            return True
         except BaseException as ex:
@@ -30,34 +51,28 @@ class ImageStoreService():
 
     def exposed_get_image_bytes(self,key: str) -> bytes :
         try :
-           xition = imageDB.begin_transaction()
-           imgdata = xition.get(key)
-           xition.end()
+           imgdata: bytes  = read_image_from_file(key)
            return imgdata.encode()
         except BaseException :
             print("Error getting image with key "+key)
             return None
 
-    def exposed_get_image_names(self,prefix: str) -> tuple :
+    def exposed_get_image_list(self,prefix: str) -> object :
         xition = imageDB.begin_transaction()
         cursor: Cursor = xition.cursor()
-        names: list = list()
+        imageData: list = list()
         foundStart: bool = False
         for kv in cursor :
             if kv == None :
                 break
             else :
-                if kv[0].startswith(prefix) :
-                    names.append(kv[1])
+                if kv["key"].startswith(prefix) :
+                    imageData.append(kv)
                 else :
-                    if len(names)>0 :
+                    if len(imageData)>0 :
                         break
-        return tuple(names)
+        return imageData
 
+    def exposed_clear_all_images(self) :
+       imageDB.clearAll()
 
-app = FastAPI()
-@app.get("/images/{image_path}")
-async def get_image(image_path: str):
-    # Returns a cv2 image array from the document vector
-
-    return StreamingResponse(io.BytesIO(im_png.tobytes()), media_type="image/png")
