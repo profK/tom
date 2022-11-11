@@ -1,9 +1,12 @@
 import base64
+import inspect
 import os.path
 
 from TomPluginManager import AppContext
 from plugins.Data import Cursor
 from datetime import datetime
+
+rootPath = os.path.dirname(inspect.getfile(inspect))
 
 def save_image_to_file(key:str, imgdata:bytes) :
     path = key[0:key.rfind("."):]
@@ -11,7 +14,8 @@ def save_image_to_file(key:str, imgdata:bytes) :
     if not os.path.exists(path) :
         os.makedirs(path)
     filename = key[key.rfind(".")+1::]
-    with open(path+"/"+filename, "wb") as binary_file:
+    path = os.path.join(rootPath,path,filename)
+    with open(path, "wb") as binary_file:
         # Write bytes to file
         binary_file.write(imgdata)
 
