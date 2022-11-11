@@ -21,7 +21,8 @@ class Cursor :
 
     def __next__(self):
         if self.cursor.next() :
-            return {"key": self.current_key(), "value": self.current_value()}
+            kv = {"key": self.current_key(), "value": self.current_value()}
+            return kv
         else :
             raise StopIteration
     def current_key(self) :

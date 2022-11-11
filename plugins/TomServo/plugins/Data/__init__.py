@@ -1,4 +1,5 @@
 import inspect
+import json
 import os
 from typing import Any
 
@@ -6,7 +7,7 @@ from TomPluginManager import AppContext
 import lmdb
 import orjson
 
-rootPath = os.path.dirname(inspect.getfile(inspect))
+rootPath = os.path.dirname(__file__)
 
 def init_plugin(ctxt:AppContext) :
     print("initted data")
@@ -17,16 +18,18 @@ env = lmdb.Environment(os.path.join(rootPath,"kv_store.lmdb"),max_dbs=100)
 class Cursor :
     def __init__(self,cursor: lmdb.Cursor,prefix: str = None) :
         self.cursor = cursor
+        self.prefix = prefix
         if not prefix==None :
-            while (not str(self.cursor.key()).startswith(prefix)) and (self.cursor.next()):
-                pass # all work done in test
+          self.cursor.set_range(prefix)
 
     def __iter__(self) :
         return self
 
     def __next__(self):
-        if self.cursor.next() :
-            return {"key": self.current_key(), "value": self.current_value()}
+        if self.next() :
+            kv =  {"key": json.loads( self.current_key().tobytes()),
+                   "value": json.loads(self.current_value().tobytes())}
+            return kv
         else :
             raise StopIteration
     def current_key(self) :
@@ -36,11 +39,7 @@ class Cursor :
         return self.cursor.value()
 
     def next(self) :
-        try :
-            return self.__next__()
-        except StopIteration :
-            return None
-
+        return self.cursor.next()
 
 
 class Trans :

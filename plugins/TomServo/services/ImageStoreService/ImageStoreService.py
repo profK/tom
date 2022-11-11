@@ -1,12 +1,14 @@
 import base64
 import inspect
+import json
 import os.path
 
 from TomPluginManager import AppContext
 from plugins.Data import Cursor
 from datetime import datetime
+from datetime import datetime
 
-rootPath = os.path.dirname(inspect.getfile(inspect))
+rootPath = os.path.dirname(__file__)
 
 def save_image_to_file(key:str, imgdata:bytes) :
     path = key[0:key.rfind("."):]
@@ -20,11 +22,11 @@ def save_image_to_file(key:str, imgdata:bytes) :
         binary_file.write(imgdata)
 
 def read_image_from_file(key:str) ->bytes :
-    fullnameNoExt = key[0:key.rfind("."):]
-    path = fullnameNoExt[0:key.rfind("."):]
-    path = path.replace(",","/")
-    filename = key[key.rfind(".")::]
-    with open(path+"/"+filename, "rb") as binary_file:
+    path = key[0:key.rfind("."):]
+    path = path.replace(",", "/")
+    filename = key[key.rfind(".") + 1::]
+    path = os.path.join(rootPath, path, filename)
+    with open(path, "rb") as binary_file:
         # read bytes from file
         return binary_file.read()
 
@@ -45,7 +47,7 @@ class ImageStoreService():
         try :
            xition = imageDB.begin_transaction()
            xition.put(key,{"key":key,  "timestamp":datetime.utcnow()})
-           save_image_to_file(key,imgdata)
+           save_image_to_file(os.path.join(rootPath,key),imgdata)
            xition.end()
            return True
         except BaseException as ex:
@@ -55,13 +57,13 @@ class ImageStoreService():
 
     def exposed_get_image_bytes(self,key: str) -> bytes :
         try :
-           imgdata: bytes  = read_image_from_file(key)
-           return imgdata.encode()
+           imgdata: bytes  = read_image_from_file(os.path.join(rootPath,key))
+           return imgdata
         except BaseException :
             print("Error getting image with key "+key)
             return None
 
-    def exposed_get_image_list(self,prefix: str) -> object :
+    def exposed_get_image_list(self,prefix: str) -> list :
         xition = imageDB.begin_transaction()
         cursor: Cursor = xition.cursor()
         imageData: list = list()
@@ -70,8 +72,13 @@ class ImageStoreService():
             if kv == None :
                 break
             else :
-                if kv["key"].startswith(prefix) :
-                    imageData.append(kv)
+                key: str =kv["key"]
+                if key.startswith(prefix) :
+                    tkv = {
+                        "key": kv["key"],
+                        "value": kv["value"]
+                    }
+                    imageData.append(tkv)
                 else :
                     if len(imageData)>0 :
                         break
