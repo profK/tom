@@ -1,7 +1,3 @@
 .idea/**
 **/*.png
-**/ImageStoreService/icons/**
-
-
-
-
+/plugins/TomServo/services/ImageStoreService/icons/
