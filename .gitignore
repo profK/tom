@@ -1,6 +1,2 @@
 .idea/**
-/kv_store.lmdb/data.mdb
-/plugins/TomServo/plugins/Data/kv_store.lmdb/data.mdb
-/kv_store.lmdb/lock.mdb
-/plugins/TomServo/plugins/Data/kv_store.lmdb/lock.mdb
 /plugins/TomServo/services/ImageStoreService/icons/LunarLander
