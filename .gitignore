@@ -1,2 +1,3 @@
 .idea/**
-/plugins/TomServo/services/ImageStoreService/icons/LunarLander
+**/*.png
+/plugins/TomServo/services/ImageStoreService/icons/
