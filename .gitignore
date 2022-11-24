@@ -1,3 +1,5 @@
 .idea/**
 **/*.png
 /plugins/TomServo/services/ImageStoreService/icons/
+**/data.mdb
+**/lock.mdb
