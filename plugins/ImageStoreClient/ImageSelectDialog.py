@@ -2,7 +2,7 @@ import os
 
 from PyQt6 import uic
 from PyQt6.QtGui import QIcon
-from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QPushButton, QLabel
+from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QPushButton, QLabel, QWidget
 
 from TomPluginManager import AppContext
 from .UploadImageDialog import UploadImageDialog
@@ -10,6 +10,7 @@ from .UploadImageDialog import UploadImageDialog
 rootdir = os.path.dirname(os.path.realpath(__file__))
 
 imageLoadingPng =  QIcon(os.path.join(rootdir, "LoadingImage.png"))
+
 
 class ImageSelectDialog :
     def __init__(self,prefix: str,ctxt:AppContext):
@@ -26,28 +27,37 @@ class ImageSelectDialog :
         self.populate()
         self.gui.exec()
 
-    def clearImageButtons(self) :
-        parentWidget = self.gui.scrollArea.contents.verticalLayout
-        while parentWidget.count():
-            child = parentWidget.takeAt(0)
-            if child.widget():
-                child.widget().deleteLater()
 
     def populate(self):
         names = self.ctxt.Connection.conn.root.ImageStoreService.get_image_list(
             self.gui.prefix.text
         )
-        self.clearImageButtons()
+
         #write names and throw off threads to get pictures
-        vLayout: QVBoxLayout = self.gui.scrollArea.contents.verticalLayout
-        currentLayout: QHBoxLayout = QHBoxLayout(vLayout)
+        vLayout: QVBoxLayout = QVBoxLayout()
+        currentLayout: QHBoxLayout = QHBoxLayout()
         for name in names :
             if currentLayout.count()==4 :
-                currentLayout: QHBoxLayout = QHBoxLayout(vLayout)
-            imageLayout: QVBoxLayout = QVBoxLayout(currentLayout)
+                hBoxWidget: QWidget = QWidget()
+                hBoxWidget.setLayout(currentLayout)
+                vLayout.addChildWidget(hBoxWidget)
+                currentLayout: QHBoxLayout = QHBoxLayout()
+            imageLayout: QVBoxLayout = QVBoxLayout()
             imageButton: QPushButton = QPushButton(imageLayout)
             imageButton.setIcon(imageLoadingPng)
             label: QLabel = QLabel(imageLayout,name)
+            imageLayout.addChildWidget(imageButton)
+            imageLayout.addChildWidget(label)
+            imageWidget : QWidget = QWidget()
+            imageWidget.setLayout(imageLayout)
+            currentLayout.addChildWidget(imageWidget)
             #launch image fetch
             #todo
+        #add last currentLayout
+        hBoxWidget: QWidget = QWidget()
+        hBoxWidget.setLayout(currentLayout)
+        vLayout.addChildWidget(hBoxWidget)
+        contentsWidget: QWidget = QWidget()
+        contentsWidget.setLayout(vLayout)
+        self.gui.scrollArea.setWidget(contentsWidget)
 
