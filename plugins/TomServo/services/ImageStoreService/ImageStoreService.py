@@ -63,26 +63,25 @@ class ImageStoreService():
             print("Error getting image with key "+key)
             return None
 
-    def exposed_get_image_list(self,prefix: str) -> list :
-        xition = imageDB.begin_transaction()
-        cursor: Cursor = xition.cursor()
-        imageData: list = list()
-        foundStart: bool = False
-        for kv in cursor :
-            if kv == None :
-                break
-            else :
-                key: str =kv["key"]
-                if key.startswith(prefix) :
-                    tkv = {
-                        "key": kv["key"],
-                        "value": kv["value"]
-                    }
-                    imageData.append(tkv)
+    def exposed_get_image_list(self,prfx: str) -> list :
+        try:
+            xition = imageDB.begin_transaction()
+            cursor: Cursor = xition.cursor()
+            imageData: list = list()
+            foundStart: bool = False
+            for kv in cursor :
+                if kv == None :
+                    break
                 else :
-                    if len(imageData)>0 :
-                        break
-        return imageData
+                    key: str =kv["key"]
+                    if key.startswith(prfx) :
+                        imageData.append(kv["value"])
+                    else :
+                        if len(imageData)>0 :
+                            break
+            return imageData
+        except BaseException as ex :
+            print(ex)
 
     def exposed_clear_all_images(self) :
        imageDB.clearAll()

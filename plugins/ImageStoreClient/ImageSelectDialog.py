@@ -30,7 +30,7 @@ class ImageSelectDialog :
 
     def populate(self):
         names = self.ctxt.Connection.conn.root.ImageStoreService.get_image_list(
-            self.gui.prefix.text
+            self.gui.prefix.text()
         )
 
         #write names and throw off threads to get pictures
